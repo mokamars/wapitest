@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>Construction Sites</title>
+    <style>
+        input[type='submit'],
+        button,
+        [aria-label] {
+            cursor: pointer;
+        }
+
+        #spoiler {
+            display: none;
+        }
+
+        table {
+            font-family: Arial, sans-serif;
+            border: 1px solid;
+            border-collapse: collapse;
+        }
+
+        th {
+            background-color: #0066CC;
+            color: white;
+        }
+
+        td {
+            border: 1px solid;
+            padding: 5px;
+        }
+    </style>
+    <script src="jquery-3.3.1.min.js"></script>
+</head>
+
+<body>
+    <center>
+        <h1>Construction Site CRUD</h1>
+    </center>
+    
+    <div id="spoiler">
+        <h3>Edit</h3>
+        <form class="my-form">
+            <input type="text" id="edit-id">
+            <input type="text" id="edit-address">
+            <input type="text" id="edit-city">
+            <input type="text" id="edit-state">
+            <input type="text" id="edit-zip">
+            <input type="text" id="edit-title">
+            <input type="text" id="edit-zones">
+            <input type="text" id="edit-levels">
+            <input type="text" id="edit-posts">
+            <input type="text" id="edit-longitude">
+            <input type="text" id="edit-latitude">
+            <input type="text" id="edit-tags">
+            <input type="text" id="edit-description">
+            <input type="submit" value="Edit" />
+            <a onclick="closeInput()" aria-label="Close">&#10006;</a>
+        </form>
+    </div>
+
+    <p id="counter"></p>
+
+    <table>
+        <tr>
+            <th>Id</th>
+            <th>Address</th>
+            <th>City</th>
+            <th>State</th>
+            <th>Zip</th>
+            <th>Title</th>
+            <th>Zones</th>
+            <th>Levels</th>
+            <th>Posts</th>
+            <th>Longitdue</th>
+            <th>Latitude</th>
+            <th>Picture</th>
+            <th>Thumbnail</th>
+            <th>Tags</th>
+            <th>Description</th>
+            <th>Manager</th>
+            <th></th>
+            <th></th>
+        </tr>
+        <tbody id="construction-sites">
+
+        </tbody>
+    </table>
+
+    <h3>Add a Construction site</h3>
+    <form id="addsite" action="javascript:void(0);" method="POST" onsubmit="addItem()">
+        <table>
+            <tr>
+                <td>
+                    <label>Address : </label>
+                </td>
+                <td>
+                    <input type="text" id="add-address">
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label>City : </label>
+                </td>
+                <td>
+                    <input type="text" id="add-city">
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label>State : </label>
+                </td>
+                <td>
+                    <input type="text" id="add-state">
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label>ZIP : </label>
+                </td>
+                <td>
+                    <input type="text" id="add-zip">
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label>Title : </label>
+                </td>
+                <td>
+                    <input type="text" id="add-title">
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label>Zones : </label>
+                </td>
+                <td>
+                    <input type="text" id="add-zones">
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label>Levels : </label>
+                </td>
+                <td>
+                    <input type="text" id="add-levels">
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label>Posts : </label>
+                </td>
+                <td>
+                    <input type="text" id="add-posts">
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label>Longitude : </label>
+                </td>
+                <td>
+                    <input type="text" id="add-longitude">
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label>Latitude : </label>
+                </td>
+                <td>
+                    <input type="text" id="add-latitude">
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label>Tags : </label>
+                </td>
+                <td>
+                    <input type="text" id="add-tags">
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label>Description : </label>
+                </td>
+                <td>
+                    <input type="text" id="add-description">
+                </td>
+            </tr>
+        </table>
+        <input type="submit" value="Add">
+    </form>
+
+    <h3>
+        Documentation:
+    </h3>
+    <div>
+        GET : https://wapitest.azurewebsites.net/
+    </div>
+    <div>
+    <div>
+        GET one Site: https://wapitest.azurewebsites.net/api/constructionsite/1 (1 is the ID)
+    </div>
+    <div>
+        DELETE one Site: https://wapitest.azurewebsites.net/api/constructionsite/1 (1 is the ID), set HTTP Verb to DELETE
+    </div>
+    <div>
+        UPDATE one Site: https://wapitest.azurewebsites.net/api/constructionsite/1 (1 is the ID), set HTTP Verb to PUT
+    </div>
+    <div>
+        Pass an object like this one (picture, thumbnail and manager filled by the api)
+    </div>
+    <pre>
+{
+    "id": 9,
+    "address": "1st NTMK",
+    "city": "HCN",
+    "state": "VN",
+    "zip": "084",
+    "title": "Site Title ...",
+    "zones": 4,
+    "levels": 3,
+    "posts": 3,
+    "longitude": -71.11095,
+    "latitude": 42.35663,
+    "tags": "site",
+    "description": "Lorem ipsum dolor sit amet...Lorem ipsum dolor sit amet...Lorem ipsum dolor sit amet",    
+}
+    </pre>
+    </div>
+    <div>
+        CREATE one Site: https://wapitest.azurewebsites.net/api/constructionsite/1 (1 is the ID), set HTTP Verb to POST
+    </div>
+    <div>
+        Pass an object like this one (picture, thumbnail and manager filled by the api)
+    </div>
+    <pre>
+{
+    "address": "1st NTMK",
+    "city": "HCN",
+    "state": "VN",
+    "zip": "084",
+    "title": "Site Title ...",
+    "zones": 4,
+    "levels": 3,
+    "posts": 3,
+    "longitude": -71.11095,
+    "latitude": 42.35663,
+    "tags": "site",
+    "description": "Lorem ipsum dolor sit amet...Lorem ipsum dolor sit amet...Lorem ipsum dolor sit amet",    
+}
+    </pre>
+    </div>
+    <div>
+        <div>
+            Available images :
+        </div>
+        <ul>
+            <li>https://wapitest.azurewebsites.net/assets/avatar.png</li>
+            <li>https://wapitest.azurewebsites.net/assets/bg_mobile.png</li>
+            <li>https://wapitest.azurewebsites.net/assets/login-bg.png</li>
+            <li>https://wapitest.azurewebsites.net/assets/logo.png</li>
+            <li>https://wapitest.azurewebsites.net/assets/img/logo.png</li>
+            <li>https://wapitest.azurewebsites.net/assets/img/no-image.png</li>
+            <li>https://wapitest.azurewebsites.net/assets/img/pict1.jpg</li>
+            <li>https://wapitest.azurewebsites.net/assets/img/pictXXX.jpg (Replace XXX by a number from 1 to 10)</li>
+        </ul>
+    </div>
+
+    <script>
+        var uri = 'api/constructionsite';
+        var constructionsites = null;
+        function getCount(data) {
+            var el = $('#counter');
+            var name = 'Construction site';
+            if (data) {
+                if (data > 1) {
+                    name = 'Construction sites';
+                }
+                el.text(data + ' ' + name);
+            } else {
+                el.html('No ' + name);
+            }
+        };
+
+        $(document).ready(function () {
+            getData();
+        });
+
+        function getData() {
+            $.ajax({
+                type: 'GET',
+                url: uri,
+                success: function (data) {
+                    $('#construction-sites').empty();
+                    getCount(data.length);
+                    $.each(data, function (key, item) {
+                        var id = '<td>' + item.id + '</td>';
+                        var address = '<td>' + item.address + '</td>';
+                        var city = '<td>' + item.city + '</td>';
+                        var state = '<td>' + item.state + '</td>';
+                        var zip = '<td>' + item.zip + '</td>';
+                        var title = '<td>' + item.title + '</td>';
+                        var zones = '<td>' + item.zones + '</td>';
+                        var levels = '<td>' + item.levels + '</td>';
+                        var posts = '<td>' + item.posts + '</td>';
+                        var longitude = '<td>' + item.longitude + '</td>';
+                        var latitude = '<td>' + item.latitude + '</td>';
+                        var picture = '<td><img width="100" src="' + item.picture + '" /></td>';
+                        var thumbnail = '<td><img width="100" src="' + item.thumbnail + '" /></td>';
+                        var tags = '<td>' + item.tags + '</td>';
+                        var description = '<td>' + item.description + '</td>';
+                        var manager = '<td>' + item.manager.name + '</td>';
+
+                        var allfields = id + address + city + state + zip + title + zones
+                            + levels + posts + longitude + latitude + picture + thumbnail
+                            + tags + description + manager;
+
+                        $('<tr>' + allfields + '<td><button onclick="editItem(' + item.id + ')">Edit</button></td><td><button onclick="deleteItem(' + item.id + ')">' +
+                            'Delete</button></td></tr>').appendTo($('#construction-sites'));
+                    });
+
+                    constructionsites = data;
+                }
+            });
+        };
+
+        function addItem() {
+            var item = {
+                'address': $('#add-address').val(),
+                'city': $('#add-city').val(),
+                'state': $('#add-state').val(),
+                'zip': $('#add-zip').val(),
+                'title': $('#add-title').val(),
+                'zones': $('#add-zones').val(),
+                'levels': $('#add-levels').val(),
+                'posts': $('#add-posts').val(),
+                'longitude': $('#add-longitude').val(),
+                'latitude': $('#add-latitude').val(),
+                'tags': $('#add-tags').val(),
+                'description': $('#add-description').val(),
+            };
+
+            $.ajax({
+                type: 'post',
+                accepts: 'application/json',
+                url: uri,
+                contentType: 'application/json',
+                data: JSON.stringify(item),
+                success: function (result) {
+                    getData();
+                    $( "#addsite input[type='text']" ).val('');                    
+                }
+            });
+        };
+
+        function deleteItem(id) {
+            $.ajax({
+                url: uri + '/' + id,
+                type: 'DELETE',
+                success: function (result) {
+                    getData();
+                }
+            });
+        };
+
+        function editItem(id) {
+            $.each(constructionsites, function (key, item) {
+                if (item.id === id) {
+                    var editId = $('#edit-id');
+                    editId.val(item.id);
+                    var editAddress = $('#edit-address');
+                    editAddress.val(item.address);
+                    var editCity = $('#edit-city');
+                    editCity.val(item.city);
+                    var ediState = $('#edit-state');
+                    ediState.val(item.state);
+                    var editZip = $('#edit-zip');
+                    editZip.val(item.zip);
+                    var editTitle = $('#edit-title');
+                    editTitle.val(item.title);
+                    var editZone = $('#edit-zones');
+                    editZone.val(item.zones);
+                    var editLevels = $('#edit-levels');
+                    editLevels.val(item.levels);
+                    var editPosts = $('#edit-posts');
+                    editPosts.val(item.posts);
+                    var editLongitude = $('#edit-longitude');
+                    editLongitude.val(item.longitude);
+                    var editLatitude = $('#edit-latitude');
+                    editLatitude.val(item.latitude);
+                    var editTags = $('#edit-tags');
+                    editTags.val(item.tags);
+                    var editDescription = $('#edit-description');
+                    editDescription.val(item.description);
+                }
+            });
+            $('#spoiler').css({ 'display': 'block' });
+        };
+
+        $('.my-form').on('submit', function () {
+            var item = {
+                'id': $('#edit-id').val(),
+                'address': $('#edit-address').val(),
+                'city': $('#edit-city').val(),
+                'state': $('#edit-state').val(),
+                'zip': $('#edit-zip').val(),
+                'title': $('#edit-title').val(),
+                'zones': $('#edit-zones').val(),
+                'levels': $('#edit-levels').val(),
+                'posts': $('#edit-posts').val(),
+                'longitude': $('#edit-longitude').val(),
+                'latitude': $('#edit-latitude').val(),
+                'tags': $('#edit-tags').val(),
+                'description': $('#edit-description').val(),
+            };
+
+            $.ajax({
+                url: uri + '/' + $('#edit-id').val(),
+                type: 'PUT',
+                accepts: 'application/json',
+                contentType: 'application/json',
+                data: JSON.stringify(item),
+                success: function (result) {
+                   // getData();
+                }
+            });
+            closeInput();
+            return false;
+        });
+
+        function closeInput() {
+            $('#spoiler').css({ 'display': 'none' });
+        }
+    </script>
+</body>
+
+</html>
